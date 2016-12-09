@@ -1,3 +1,10 @@
+/*
+
+          MINI SNIPER-----------------JavaScript
+
+*/
+
+
 var canvas= document. getElementById( "Canvas");
 var c2d= canvas. getContext( "2d");
 var rect= canvas. getBoundingClientRect();
@@ -20,7 +27,7 @@ function make()
 
   /*
   *make() function is used to create a new object that moves on the canvas...
-  *object has three main parameters x, y, dim, angle defining the position, size and trajectory.
+  *object has four main parameters x, y, dim, angle defining the position, size and trajectory.
   *if bomb is true then the object is a bomb....obviously :p.
   *active tells the state of the object. If false then it is already shot by player.
   *speed tells the relative change in the position when ever it is redrawn on screen. x= x+ speed* cos( angle), y= y- speed* sin( angle), since verticle axis increases as we move down.
@@ -80,6 +87,22 @@ function make()
 function clean()
 {
   //To remove non-active objects
+  var tmp= [];
+
+  for( var i= 0; i< sz; i++)
+  {
+    if( obj[ i]. active) tmp. push( obj[ i]);
+  }
+
+  obj. length= 0;
+  sz= tmp. length;
+
+  for( var i= 0; i< sz; i++)
+  {
+    obj. push( tmp);
+  }
+
+  tmp. length= 0;
 }
 
 function toRadian( angle)
@@ -108,9 +131,8 @@ function draw()
     if( !obj[ i]. active) continue;
 
     c2d. beginPath();
-    c2d. rect( obj[ i]. x ,obj[ i]. y, 20, 20);
-    c2d. fill();
-    c2d. closePath();
+    c2d. arc( obj[ i]. x, obj[ i]. y, obj[ i]. dim, 0, 2* Math. PI);
+    c2d. stroke();
 
     alter( obj[ i]);
   }
@@ -119,6 +141,11 @@ function draw()
 function check( toComp, x1, y1)
 {
   //to check if the object lies in the target area.
+  var dist= (x1- toComp. x)* (x1- toComp. x)+ (y1- toComp. y)* (y1- toComp. y);
+
+  if( dist<= toComp. dim* toComp. dim) return true;
+
+  return false;
 }
 
 function shootEvent( event)
