@@ -4,7 +4,6 @@
 
 */
 
-
 var canvas= document. getElementById( "Canvas");
 var c2d= canvas. getContext( "2d");
 var rect= canvas. getBoundingClientRect();
@@ -22,7 +21,7 @@ function generate( min, max)
 
 function make()
 {
-  var newObj= {x: 0, y: 0, dim= 0, angle: 0, bomb: false, active: false, speed: 0, award: 0}
+  var newObj= {x: 0, y: 0, dim: 0, angle: 0, bomb: false, active: false, speed: 0, award: 0}
 
 
   /*
@@ -34,9 +33,8 @@ function make()
   *score+= award on a hit.
   */
 
-
   //Setting x and y coordinates of new target/bomb.
-  var boundry= generate( 1, 4);
+  var boundry= Math. floor( generate( 1, 4) );
   var loc= generate( 100, 400);
 
   if( boundry== 1|| boundry== 3) loc*= 2;
@@ -72,7 +70,7 @@ function make()
   //
 
   //Default Speed= 1 is used. Can be modified for better gaming experience.
-  newObj. speed= 1;
+  newObj. speed= 5;
   //
 
   //Default score increment on a hit= 50. Can be modified for better gaming experience.
@@ -82,6 +80,8 @@ function make()
   //Finally add it to the working array of obj.
   obj. push( newObj);
   //
+
+  //document. write( newObj. x+ " "+ newObj. y+ " "+ newObj. dim+ " "+ newObj. angle+ " "+ newObj. bomb+ " "+ newObj. active+ " "+ newObj. speed+ " "+ newObj. award);
 }
 
 function clean()
@@ -152,6 +152,12 @@ function shootEvent( event)
 {
   var x1= event. clientX- rect. left, y1= event. clientY- rect. top;
 
+  /*
+  c2d. beginPath();
+  c2d. arc( x1, y1, 30, 0, 2* Math. PI);
+  c2d. stroke();
+  */
+
   sz= obj. length;
   for( var i= 0; i< sz; i++)
   {
@@ -172,10 +178,11 @@ function shootEvent( event)
   }
 }
 
+
 document. addEventListener( "click", shootEvent);
 
-setInterval( draw, 10);
+setInterval( draw, 50);
 
-setInterval( make, 50);
+setInterval( make, 1000);
 
-setInterval( clean, 10000);
+//setInterval( clean, 5000);
