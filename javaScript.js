@@ -9,9 +9,9 @@ var c2d= canvas. getContext( "2d");
 var rect= canvas. getBoundingClientRect();
 
 var obj= [];
-
 var sz= 0;
-var player= {life: 3, score: 0}
+
+var player= {life: 3, score: 0};
 
 function generate( min, max)
 {
@@ -32,19 +32,19 @@ function make()
   *score+= award on a hit.
   */
 
+  //Setting dimension
+  newObj. dim= Math. floor( generate( 30, 38));
+  //
+
   //Setting x and y coordinates of new target/bomb.
   var boundry= Math. floor( generate( 1, 4) );
   if( boundry== 1|| boundry== 3) newObj. x= generate( 0, canvas. width);
   if( boundry== 2|| boundry== 4) newObj. y= generate( 0, canvas. height);
 
-  if( boundry== 1) newObj. y= canvas. height+ 0.0;
-  if( boundry== 2) newObj. x= canvas. width+ 0.0;
-  if( boundry== 3) newObj. y= 0.0;
-  if( boundry== 4) newObj. x= 0.0;
-  //
-
-  //Setting dimension
-  newObj. dim= 35;
+  if( boundry== 1) newObj. y= canvas. height+ newObj. dim;
+  if( boundry== 2) newObj. x= canvas. width+ newObj. dim;
+  if( boundry== 3) newObj. y= 0.0- newObj. dim;
+  if( boundry== 4) newObj. x= 0.0- newObj. dim;
   //
 
   //Setting angle.
@@ -65,25 +65,25 @@ function make()
   {
     newObj. effectOn= "score";
     newObj. effect= +50;
-    newObj. speed= 3;
+    newObj. speed= 1.5;
   }
   if( type> 5 && type<= 7)
   {
     newObj. effectOn= "score";
     newObj. effect= -20;
-    newObj. speed= 3;
+    newObj. speed= 1.5;
   }
   if( type> 7 && type<= 9)
   {
     newObj. effectOn= "life";
     newObj. effect= -1;
-    newObj. speed= 3;
+    newObj. speed= 1.5;
   }
   if( type> 9 && type<= 10)
   {
     newObj. effectOn= "life";
     newObj. effect= +1;
-    newObj. speed= 3;
+    newObj. speed= 1.5;
   }
   //
 
@@ -142,17 +142,18 @@ function draw()
 
     c2d. beginPath();
     c2d. arc( obj[ i]. x, obj[ i]. y, obj[ i]. dim, 0, 2* Math. PI);
+    c2d. lineWidth= 5;
 
     if( obj[ i]. effectOn== "life")
     {
-      c2d. fillStyle= "yellow";
+      c2d. fillStyle= "#170000";
       if( obj[ i]. effect<= 0) c2d. strokeStyle= "blue";
       if( obj[ i]. effect> 0) c2d. strokeStyle= "orange";
     }
 
     if( obj[ i]. effectOn== "score")
     {
-      c2d. fillStyle= "yellow";
+      c2d. fillStyle= "#170000";
       if( obj[ i]. effect>= 0) c2d. strokeStyle= "aqua";
       if( obj[ i]. effect< 0) c2d. strokeStyle= "green";
     }
@@ -167,6 +168,7 @@ function draw()
 function check( toComp, x1, y1)
 {
   //to check if the object lies in the target area.
+
   var dist= (x1- toComp. x)* (x1- toComp. x)+ (y1- toComp. y)* (y1- toComp. y);
 
   if( dist<= toComp. dim* toComp. dim) return true;
@@ -193,10 +195,10 @@ function shootEvent( event)
 }
 
 
-document. addEventListener( "click", shootEvent);
+document. addEventListener( "mousedown", shootEvent);
 
-setInterval( draw, 20);
+setInterval( draw, 10);
 
-setInterval( make, 100);
+setInterval( make, 1400);
 
 setInterval( clean, 5000);
