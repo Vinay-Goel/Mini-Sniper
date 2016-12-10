@@ -11,8 +11,7 @@ var rect= canvas. getBoundingClientRect();
 var obj= [];
 
 var sz= 0;
-var life= 3;
-var score= 0;
+var player= {life: 3, score: 0}
 
 function generate( min, max)
 {
@@ -21,7 +20,7 @@ function generate( min, max)
 
 function make()
 {
-  var newObj= {x: 0, y: 0, dim: 0, angle: 0, bomb: false, active: false, speed: 0, award: 0}
+  var newObj= {x: 0, y: 0, dim: 0, angle: 0, active: false, speed: 0, effectOn: "", effect: 0}
 
 
   /*
@@ -35,12 +34,8 @@ function make()
 
   //Setting x and y coordinates of new target/bomb.
   var boundry= Math. floor( generate( 1, 4) );
-  var loc= generate( 100, 400);
-
-  if( boundry== 1|| boundry== 3) loc*= 2;
-
-  newObj. x= loc;
-  newObj. y= loc;
+  if( boundry== 1|| boundry== 3) newObj. x= generate( 0, canvas. width);
+  if( boundry== 2|| boundry== 4) newObj. y= generate( 0, canvas. height);
 
   if( boundry== 1) newObj. y= canvas. height+ 0.0;
   if( boundry== 2) newObj. x= canvas. width+ 0.0;
@@ -49,11 +44,11 @@ function make()
   //
 
   //Setting dimension
-  newObj. dim= 15;
+  newObj. dim= 35;
   //
 
   //Setting angle.
-  var ang= generate( 15, 75);
+  var ang= generate( 25, 65);
   if( newObj. x<= canvas. width/ 2 && newObj. y>= canvas. height/ 2) newObj. angle= ang;
   if( newObj. x>= canvas. width/ 2 && newObj. y>= canvas. height/ 2) newObj. angle= ang+ 90;
   if( newObj. x>= canvas. width/ 2 && newObj. y<= canvas. height/ 2) newObj. angle= ang+ 180;
@@ -64,17 +59,32 @@ function make()
   newObj. active= true;
   //
 
-  //1/3rd probability that new object is a bomb.
-  var type= generate( 1, 3);
-  if( type== 3) newObj. bomb= true;
   //
-
-  //Default Speed= 1 is used. Can be modified for better gaming experience.
-  newObj. speed= 5;
-  //
-
-  //Default score increment on a hit= 50. Can be modified for better gaming experience.
-  newObj. award= 50;
+  var type= Math. floor( generate( 1, 10) );
+  if( type<= 5)
+  {
+    newObj. effectOn= "score";
+    newObj. effect= +50;
+    newObj. speed= 3;
+  }
+  if( type> 5 && type<= 7)
+  {
+    newObj. effectOn= "score";
+    newObj. effect= -20;
+    newObj. speed= 3;
+  }
+  if( type> 7 && type<= 9)
+  {
+    newObj. effectOn= "life";
+    newObj. effect= -1;
+    newObj. speed= 3;
+  }
+  if( type> 9 && type<= 10)
+  {
+    newObj. effectOn= "life";
+    newObj. effect= +1;
+    newObj. speed= 3;
+  }
   //
 
   //Finally add it to the working array of obj.
@@ -132,6 +142,22 @@ function draw()
 
     c2d. beginPath();
     c2d. arc( obj[ i]. x, obj[ i]. y, obj[ i]. dim, 0, 2* Math. PI);
+
+    if( obj[ i]. effectOn== "life")
+    {
+      c2d. fillStyle= "yellow";
+      if( obj[ i]. effect<= 0) c2d. strokeStyle= "blue";
+      if( obj[ i]. effect> 0) c2d. strokeStyle= "orange";
+    }
+
+    if( obj[ i]. effectOn== "score")
+    {
+      c2d. fillStyle= "yellow";
+      if( obj[ i]. effect>= 0) c2d. strokeStyle= "aqua";
+      if( obj[ i]. effect< 0) c2d. strokeStyle= "green";
+    }
+
+    c2d. fill();
     c2d. stroke();
 
     alter( obj[ i]);
@@ -152,12 +178,6 @@ function shootEvent( event)
 {
   var x1= event. clientX- rect. left, y1= event. clientY- rect. top;
 
-  /*
-  c2d. beginPath();
-  c2d. arc( x1, y1, 30, 0, 2* Math. PI);
-  c2d. stroke();
-  */
-
   sz= obj. length;
   for( var i= 0; i< sz; i++)
   {
@@ -167,13 +187,7 @@ function shootEvent( event)
     {
         obj[ i]. active= false;
 
-        if( obj[ i]. bomb)
-        {
-          life--;
-          continue;
-        }
-
-        score+= obj[ i]. award;
+        player[ obj[ i]. effectOn]+= obj[ i]. effect;
     }
   }
 }
@@ -181,8 +195,8 @@ function shootEvent( event)
 
 document. addEventListener( "click", shootEvent);
 
-setInterval( draw, 50);
+setInterval( draw, 20);
 
-setInterval( make, 1000);
+setInterval( make, 1200);
 
-//setInterval( clean, 5000);
+//setInterval( clean, 15000);
