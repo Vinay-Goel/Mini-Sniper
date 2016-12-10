@@ -1,16 +1,9 @@
-html
+html, body
 {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
   background-color: #170000;
-}
-
-#player
-{
-  position: fixed;
-  width: 20%;
-  height: 90%;
-  top: 2%;
-  left: 2%;
-  background-color: #efd1d1;
 }
 
 canvas
@@ -18,22 +11,18 @@ canvas
   background-color: #efd1d1;
 }
 
+#Canvas
+{
+}
+
+#player
+{
+}
+
 #rules
 {
-  position: fixed;
-  width: 20%;
-  height: 90%;
-  top: 2%;
-  right: 2%;
-  background-color: #efd1d1;
 }
 
 #me
 {
-  position: fixed;
-  width: 50%;
-  height: 15%;
-  bottom: 2%;
-  left: 25%;
-  background-color: #efd1d1;
 }
