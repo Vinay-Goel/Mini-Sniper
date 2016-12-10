@@ -109,7 +109,7 @@ function clean()
 
   for( var i= 0; i< sz; i++)
   {
-    obj. push( tmp);
+    obj. push( tmp[ i]);
   }
 
   tmp. length= 0;
@@ -197,6 +197,6 @@ document. addEventListener( "click", shootEvent);
 
 setInterval( draw, 20);
 
-setInterval( make, 1200);
+setInterval( make, 100);
 
-//setInterval( clean, 15000);
+setInterval( clean, 5000);
