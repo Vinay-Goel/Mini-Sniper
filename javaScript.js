@@ -10,8 +10,8 @@ var c2d= Canvas. getContext( "2d");
 var playerCanvas= document. getElementById( "player");
 var pc2d= playerCanvas. getContext( "2d");
 
-var ruleCanvas= document. getElementById( "rules");
-var rc2d= ruleCanvas. getContext( "2d");
+var rulesCanvas= document. getElementById( "rules");
+var rc2d= rulesCanvas. getContext( "2d");
 
 var meCanvas= document. getElementById( "me");
 var mc2d= meCanvas. getContext( "2d");
@@ -36,9 +36,9 @@ Canvas. style. position= "fixed";
 playerCanvas. style. top= "10%";
 playerCanvas. style. position= "fixed";
 
-ruleCanvas. style. right= "0%";
-ruleCanvas. style. top= "10%";
-ruleCanvas. style. position= "fixed";
+rulesCanvas. style. right= "0%";
+rulesCanvas. style. top= "10%";
+rulesCanvas. style. position= "fixed";
 
 meCanvas. style. left= "20%";
 meCanvas. style. bottom= "0%";
@@ -98,26 +98,26 @@ function make()
   //
 
   //
-  var type= Math. floor( generate( 1, 10) );
-  if( type<= 5)
+  var type= Math. floor( generate( 1, 100) );
+  if( type<= 50)
   {
     newObj. effectOn= "score";
     newObj. effect= +50;
     newObj. speed= 2;
   }
-  if( type> 5 && type<= 7)
+  if( type> 50 && type<= 70)
   {
     newObj. effectOn= "score";
     newObj. effect= -20;
     newObj. speed= 2;
   }
-  if( type> 7 && type<= 9)
+  if( type> 70 && type<= 99)
   {
     newObj. effectOn= "life";
     newObj. effect= -1;
     newObj. speed= 2;
   }
-  if( type> 9 && type<= 10)
+  if( type> 99 && type<= 100)
   {
     newObj. effectOn= "life";
     newObj. effect= +1;
@@ -240,6 +240,9 @@ function shootEvent( event)
   if( player. life== 0)
   {
     _end= true;
+    var grad= c2d. createLinearGradient( 0, 0, 200, 0);
+    grad. addColorStop( 0, "red");
+    c2d. fillStyle= grad;
     c2d. font= "50px Verdana";
     c2d. fillText( "GAME OVER!", Canvas. width/ 4, Canvas. height/ 2);
   }
@@ -249,15 +252,68 @@ function drawPlayer()
 {
   pc2d. clearRect( 0, 0, playerCanvas. width, playerCanvas. height);
   pc2d. font= "20px Verdana";
-  pc2d. fillText( "Player Stats::", 10, 50);
+  pc2d. fillText( "PLAYER STAT::", 10, 30);
   pc2d. fillText( "Life Left: "+ player. life, 10, 150);
   pc2d. fillText( "Total Score: "+ player. score, 10, 200);
+}
+
+function drawRules()
+{
+  rc2d. font= "20px Verdana";
+  rc2d. fillText( "RULES::", 60, 30);
+
+  rc2d. lineWidth= 3;
+  rc2d. fillStyle= "#170000";
+
+  rc2d. beginPath();
+  rc2d. arc( rulesCanvas. width/ 2, 100, 25, 0, 2* Math. PI);
+  rc2d. strokeStyle= "aqua";
+  rc2d. fill();
+  rc2d. stroke();
+  rc2d. fillText( "Score +50", 50, 150);
+
+  rc2d. beginPath();
+  rc2d. arc( rulesCanvas. width/ 2, 210, 25, 0, 2* Math. PI);
+  rc2d. strokeStyle= "green";
+  rc2d. fill();
+  rc2d. stroke();
+  rc2d. fillText( "Score -20", 50, 260);
+
+  rc2d. beginPath();
+  rc2d. arc( rulesCanvas. width/ 2, 320, 25, 0, 2* Math. PI);
+  rc2d. strokeStyle= "blue";
+  rc2d. fill();
+  rc2d. stroke();
+  rc2d. fillText( "Life -1", 70, 370);
+
+  rc2d. beginPath();
+  rc2d. arc( rulesCanvas. width/ 2, 430, 25, 0, 2* Math. PI);
+  rc2d. strokeStyle= "orange";
+  rc2d. fill();
+  rc2d. stroke();
+  rc2d. fillText( "Life +1", 70, 480);
+}
+
+function drawMe()
+{
+  mc2d. font= "15px Verdana";
+  mc2d. fillText( "MINI-SNIPER", meCanvas. width/ 2- 50, meCanvas. height/ 2+ 5);
+  mc2d. fillText( "(Best Playable with mouse)", meCanvas. width/ 2- 100, meCanvas. height/ 2+ 25);
+  mc2d. fillText( "Vinay Goel,", 30, 60);
+  mc2d. fillText( "NITJ", 30, 80);
+  mc2d. fillText( "Contact::", meCanvas. width- 230, 50);
+  mc2d. fillText( "vinaygoel214@gmail.com", meCanvas. width- 230, 70);
+  mc2d. fillText( "vinay-goel.github.io", meCanvas. width- 230, 90);
 }
 
 
 document. addEventListener( "mousedown", shootEvent);
 
 drawPlayer();
+
+drawRules();
+
+drawMe();
 
 setInterval( draw, 10);
 
